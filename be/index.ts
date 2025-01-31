@@ -7,13 +7,16 @@ import userRoutes from './routes/user.route.ts'
 
 import connectToMongoDB from './db/connectToMongoDB.ts'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import { app, server } from './scoket/socket.ts'
 
 dotenv.config()
 
-const app = express()
+// const app = express()
 
 app.use(express.json())
 app.use(cookieParser());
+// app.use(cors({origin:'http://localhost:5173'}))
 
 const PORT = process.env.PORT || 5000
 
@@ -24,7 +27,7 @@ app.use('/api/messages',messageRoutes)
 app.use('/api/users',userRoutes)
 
 // You need to call listen on the result of app.listen
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectToMongoDB();
     console.log('Server is running at http://localhost:5000')
 })

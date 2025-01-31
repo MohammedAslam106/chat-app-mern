@@ -1,6 +1,7 @@
 import {type Request, type Response} from 'express'
 import Conversation from '../models/conversion.mdel';
 import Message from '../models/message.model';
+import { getReceiverSocketId, io } from '../scoket/socket';
 
 export const sendMessage=async(req:any,res:Response)=>{
     try {
@@ -28,12 +29,17 @@ export const sendMessage=async(req:any,res:Response)=>{
             conversation.messages.push(newMessage._id)
         }
 
-        // TODO: SOCKET IO FUNCTINALITY WILL GO HERE
-
         // await conversation.save();
         // await newMessage.save();
 
         await Promise.all([conversation.save(), newMessage.save()])
+
+        // TODO: SOCKET IO FUNCTINALITY WILL GO HERE
+        const receiverSocketId=getReceiverSocketId(receiverId)
+        if(receiverSocketId){
+            // io.to(socketId).emit() is used to send events to specific client
+            io.to(receiverSocketId).emit('newMessage',newMessage)
+        }
 
         res.status(201).json(newMessage)
     } catch (error:any) {
@@ -48,7 +54,7 @@ export const getMessages = async (req:any,res:Response)=>{
         const {id:userToChatId}=req.params;
         const senderId=req.user._id;
 
-        console.log(51,req.user)
+        // console.log(51,req.user)
         const conversation= await Conversation.findOne({
             participants:{$all: [senderId,userToChatId]}
         }).populate('messages');
