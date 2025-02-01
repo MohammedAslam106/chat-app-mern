@@ -33,10 +33,9 @@ export default function SocketContextProvider({children}:SocketContextProps ){
 
     useEffect(()=>{
         if(authUser){
-            const newSocket = io(`https://chat-app-mern-production-ukgl.onrender.com`,{
-                query:{
-                    userId:authUser._id
-                }
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const newSocket = io(`${protocol}//chat-app-mern-production-ukgl.onrender.com`, {
+                query: { userId: authUser._id },
             });
 
             setSocket(newSocket);
