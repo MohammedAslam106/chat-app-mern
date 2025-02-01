@@ -33,7 +33,7 @@ export default function SocketContextProvider({children}:SocketContextProps ){
 
     useEffect(()=>{
         if(authUser){
-            const newSocket = io(`http://localhost:5000`,{
+            const newSocket = io(`https://chat-app-mern-production-ukgl.onrender.com`,{
                 query:{
                     userId:authUser._id
                 }
