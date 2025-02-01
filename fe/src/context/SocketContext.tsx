@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { useAuthContext } from "./AuthContext"
 import io, { Socket } from 'socket.io-client'
-import { query } from "express"
+// import { query } from "express"
 
 interface SocketContextProps{
     children:ReactNode

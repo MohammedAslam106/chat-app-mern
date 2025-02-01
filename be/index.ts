@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
 
@@ -7,7 +8,7 @@ import userRoutes from './routes/user.route.ts'
 
 import connectToMongoDB from './db/connectToMongoDB.ts'
 import cookieParser from 'cookie-parser'
-import cors from 'cors'
+// import cors from 'cors'
 import { app, server } from './scoket/socket.ts'
 
 dotenv.config()
@@ -20,11 +21,19 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000
 
+const __dirname=path.resolve()
+
 app.use('/api/auth',authRoutes);
 
 app.use('/api/messages',messageRoutes)
 
 app.use('/api/users',userRoutes)
+
+app.use(express.static(path.join(__dirname,'/fe/dist')))
+
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,"fe","dist",'index.html'))
+})
 
 // You need to call listen on the result of app.listen
 server.listen(PORT, () => {
