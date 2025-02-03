@@ -20,5 +20,5 @@ export default function useListenMessages(){
         })
 
         return ()=>{socket?.off('newMessage')}
-    },[socket,messages])
+    },[socket,messages,setMessages])
 }
